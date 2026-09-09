@@ -50,6 +50,7 @@ html {
   scroll-behavior: smooth;
   scroll-padding-top: 84px;
   -webkit-text-size-adjust: 100%;
+  overflow-x: hidden; /* ← html レベルで横はみ出しを封じる */
 }
 
 body {
@@ -102,10 +103,15 @@ h1, h2, h3, h4, h5 {
   padding: 32px 0 64px;
 }
 
+/* main / article を常に 0 まで縮めることができるようにする。
+   これにより内部の幅広要素が grid cell を押し広げなくなる。 */
+main, .article { min-width: 0; }
+
 .sidebar { position: sticky; top: 84px; display: grid; gap: 20px; }
 
 @media (max-width: 960px) {
-  .layout { grid-template-columns: 1fr; gap: 32px; padding-bottom: 96px; }
+  /* 1fr だとコンテンツ幅で広がってしまうので minmax(0,1fr) に変更 */
+  .layout { grid-template-columns: minmax(0, 1fr); gap: 32px; padding-bottom: 96px; }
   .sidebar { position: static; }
 }
 

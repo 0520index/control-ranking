@@ -50,7 +50,8 @@ html {
   scroll-behavior: smooth;
   scroll-padding-top: 84px;
   -webkit-text-size-adjust: 100%;
-  overflow-x: hidden; /* ← html レベルで横はみ出しを封じる */
+  /* clip は横はみ出しを防ぎつつ sticky を壊さない（hidden だと追従ヘッダーが無効化される） */
+  overflow-x: clip;
 }
 
 body {
@@ -62,7 +63,7 @@ body {
   background: var(--c-bg);
   font-feature-settings: "palt" 1;
   overflow-wrap: anywhere;
-  overflow-x: hidden;
+  overflow-x: clip;
   -webkit-tap-highlight-color: rgba(11, 47, 79, .12);
 }
 
@@ -95,33 +96,77 @@ h1, h2, h3, h4, h5 {
   margin-inline: auto;
 }
 
-.layout {
+/*
+  本文を画面中央に置き、aside はその右外側へ。
+  3列グリッド: [余白1fr] [本文] [余白1fr]
+  aside は右余白列の先頭に置く。
+*/
+.wrap.layout {
+  --article-max: 720px;
+  --sidebar-w: 280px;
+  --sidebar-gap: 40px;
+  width: min(100% - 32px, 1320px);
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 320px;
-  gap: 48px;
+  grid-template-columns: 1fr minmax(0, var(--article-max)) 1fr;
+  column-gap: 0;
   align-items: start;
   padding: 32px 0 64px;
 }
 
-/* main / article を常に 0 まで縮めることができるようにする。
-   これにより内部の幅広要素が grid cell を押し広げなくなる。 */
-main, .article { min-width: 0; }
-
-.sidebar { position: sticky; top: 84px; display: grid; gap: 20px; }
-
-@media (max-width: 960px) {
-  /* 1fr だとコンテンツ幅で広がってしまうので minmax(0,1fr) に変更 */
-  .layout { grid-template-columns: minmax(0, 1fr); gap: 32px; padding-bottom: 96px; }
-  .sidebar { position: static; }
+.wrap.layout > main {
+  grid-column: 2;
+  min-width: 0;
 }
 
-/* ---------- Header ---------- */
+.article { min-width: 0; }
+
+.wrap.layout > .sidebar {
+  grid-column: 3;
+  justify-self: start;
+  align-self: start;
+  width: var(--sidebar-w);
+  max-width: 100%;
+  margin-left: var(--sidebar-gap);
+  position: static; /* スクロール追従しない */
+  display: grid;
+  gap: 20px;
+}
+
+/* 中幅: 中央寄せをやめ、本文＋サイドバーの2列に */
+@media (max-width: 1180px) {
+  .wrap.layout {
+    width: min(100% - 32px, var(--wrap));
+    grid-template-columns: minmax(0, 1fr) var(--sidebar-w);
+    column-gap: 36px;
+  }
+  .wrap.layout > main,
+  .wrap.layout > .sidebar {
+    grid-column: auto;
+    margin-left: 0;
+  }
+}
+
+/* スマホ・タブレット: 1列にスタック */
+@media (max-width: 960px) {
+  .wrap.layout {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 32px;
+    padding-bottom: 96px;
+  }
+  .wrap.layout > .sidebar {
+    width: auto;
+  }
+}
+
+/* ---------- Header（スクロール追従） ---------- */
 .site-header {
+  position: -webkit-sticky;
   position: sticky;
   top: 0;
   z-index: 60;
   background: rgba(255, 255, 255, .96);
   backdrop-filter: saturate(160%) blur(8px);
+  -webkit-backdrop-filter: saturate(160%) blur(8px);
   border-bottom: 1px solid var(--c-border);
 }
 
@@ -758,7 +803,7 @@ table.compare thead .col-1st { background: linear-gradient(135deg, #e0b93c, #b88
   .hero-quick a { padding: 12px; }
 
   /* --- レイアウト --- */
-  .layout { padding: 20px 0 92px; gap: 28px; }
+  .wrap.layout { padding: 20px 0 92px; gap: 28px; }
   .breadcrumb { font-size: 11.5px; }
 
   /* --- 記事本文 --- */
@@ -951,5 +996,7 @@ table.compare thead .col-1st { background: linear-gradient(135deg, #e0b93c, #b88
 
 @media print {
   .site-header, .sticky-cta, .to-top, .sidebar, .site-footer { display: none !important; }
-  .layout { grid-template-columns: 1fr; }
+  .wrap.layout { grid-template-columns: minmax(0, 1fr); }
+  .wrap.layout > main,
+  .wrap.layout > .sidebar { grid-column: auto; margin-left: 0; }
 }

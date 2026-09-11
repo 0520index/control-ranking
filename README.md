@@ -17,7 +17,8 @@ control-ranking/
 │   ├── hiyou-souba.html            # 費用相場（情報収集フェーズの流入獲得）
 │   └── erabikata.html              # 業者の選び方（比較検討フェーズの流入獲得）
 ├── areas/
-│   └── tokyo.html                  # 東京エリア（ローカル検索の流入獲得）
+│   ├── tokyo.html                  # 東京エリア（ローカル検索の流入獲得）
+│   └── kanagawa.html               # 神奈川エリア（横浜・川崎・相模原）
 ├── assets/
 │   ├── css/style.css               # デザインシステム一式
 │   └── js/main.js                  # 目次自動生成・追従CTA・ナビ等
@@ -57,6 +58,7 @@ Get-ChildItem -Recurse -Include *.html,*.xml,*.txt |
 | `columns/hiyou-souba.html` | 害鳥駆除 費用 相場 | 鳩駆除 費用、防鳥ネット 価格、ハト 駆除 いくら |
 | `columns/erabikata.html` | 害鳥駆除 業者 選び方 | 鳩駆除 業者 悪質、鳥害対策 失敗 |
 | `areas/tokyo.html` | 害鳥駆除 東京 / 鳩駆除 東京 | 東京 鳥害対策 業者、23区 ハト 駆除 |
+| `areas/kanagawa.html` | 害鳥駆除 神奈川 / 鳩駆除 横浜 | 神奈川 鳥害対策 業者、川崎 ハト 駆除 |
 | `companies/*.html` | 各社名 + 評判 / 口コミ / 料金 | 指名検索の刈り取り |
 
 ### 実装済みの技術的SEO
@@ -172,7 +174,7 @@ Chrome DevTools のデバイスツールバー（Ctrl+Shift+M）で以下の幅�
 
 ### 優先度：高
 
-- `areas/kanagawa.html`、`areas/saitama.html`、`areas/chiba.html` — レスキュー侍の対応4県を網羅
+- `areas/saitama.html`、`areas/chiba.html` — レスキュー侍の対応県を追加（`kanagawa.html` は作成済み）
 - `columns/hato-taisaku.html` — 鳩対策の総合ガイド（検索ボリュームが最大）
 - `columns/choju-hogoho.html` — 鳥獣保護管理法の詳細解説（法令系は権威性の獲得に有効）
 

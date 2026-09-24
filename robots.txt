@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://bird-control-ranking.jp/sitemap.xml
+Sitemap: https://hato-taisaku.osusume-navi.info/sitemap.xml
